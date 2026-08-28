@@ -1,0 +1,39 @@
+# Local configuration - contains tenant IDs. Never commit.
+config.json
+
+# Run output - contains environment names, URLs and GUIDs
+scripts/runs/
+runs/
+output/
+*.csv
+evidence-*.txt
+checkpoint.json
+
+# Environment ID lists
+environments.txt
+*-environments.txt
+
+# Baselines captured from a live tenant
+*-baseline.txt
+*-baseline.json
+
+# Secrets, in every spelling anyone has ever used
+*.secret
+*secret*.txt
+.env
+.env.*
+
+# Auth artefacts
+*.pfx
+*.pem
+*.key
+
+# OS and editor
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+
+# PowerShell
+*.ps1xml.bak

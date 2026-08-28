@@ -1,0 +1,46 @@
+<!--
+  Step 2 of 2. Assert the state of every AI control process.
+
+  This is the compliance query, the drift detection query, and the artefact
+  worth dating and keeping in an audit file.
+
+  BEFORE RUNNING: replace the four values below with the objecttypecode values
+  that query 01 returned for YOUR environment. The ones left in place are
+  illustrative.
+
+    401    msdyn_aimodel           stable, below 10000
+    402    msdyn_aiconfiguration   stable, below 10000
+    10225  bot                     PER ORGANIZATION, will differ in yours
+    10227  botcomponentcollection  PER ORGANIZATION, will differ in yours
+
+  type=1 restricts to Definition records. Activation children are deleted
+  during solution import, so counts drift legitimately while the block stays
+  intact. Assert on statecode, never on row count.
+
+  IsPaiEnabled has a primaryentity of none, so it needs its own name branch.
+
+  statecode 0 = Draft (deactivated). statecode 1 = Activated.
+
+  Usage is in queries/README.md.
+-->
+<fetch version="1.0" mapping="logical" count="500">
+  <entity name="workflow">
+    <attribute name="name" />
+    <attribute name="primaryentity" />
+    <attribute name="type" />
+    <attribute name="statecode" />
+    <filter type="and">
+      <condition attribute="type" operator="eq" value="1" />
+      <filter type="or">
+        <condition attribute="primaryentity" operator="in">
+          <value>401</value>
+          <value>402</value>
+          <value>10225</value>
+          <value>10227</value>
+        </condition>
+        <condition attribute="name" operator="eq" value="IsPaiEnabled" />
+      </filter>
+    </filter>
+    <order attribute="name" />
+  </entity>
+</fetch>

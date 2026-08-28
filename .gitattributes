@@ -1,0 +1,6 @@
+# Normalise line endings in the repository. Working copies get native endings.
+* text=auto eol=lf
+
+# Binary
+*.png binary
+*.pfx binary

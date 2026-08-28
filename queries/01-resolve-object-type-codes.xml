@@ -1,0 +1,28 @@
+<!--
+  Step 1 of 2. Resolve object type codes for THIS environment.
+
+  Codes at or above 10000 are assigned per organization. Both agent tables live
+  in that range, so your values will differ from anyone else's. Never hardcode
+  them: a stale code silently skips those processes and still reports compliant.
+
+  A table that returns no row is simply absent from that environment. Treat it
+  as a skip, not an error.
+
+  Usage is in queries/README.md. Do not paste CLI flags into this comment: a
+  double hyphen is illegal inside an XML comment and breaks the file.
+-->
+<fetch version="1.0" mapping="logical">
+  <entity name="entity">
+    <attribute name="logicalname" />
+    <attribute name="objecttypecode" />
+    <filter type="and">
+      <condition attribute="logicalname" operator="in">
+        <value>msdyn_aimodel</value>
+        <value>msdyn_aiconfiguration</value>
+        <value>bot</value>
+        <value>botcomponentcollection</value>
+      </condition>
+    </filter>
+    <order attribute="logicalname" />
+  </entity>
+</fetch>

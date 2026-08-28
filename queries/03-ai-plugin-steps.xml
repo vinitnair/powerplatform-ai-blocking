@@ -1,0 +1,27 @@
+<!--
+  Optional. Enumerate AI plug-in registration steps.
+
+  These sit below the process layer and are not required for the block.
+  Deactivating the AI processes was sufficient on its own. Changing plug-in
+  steps carries a larger blast radius for no demonstrated additional benefit,
+  so enumerate and monitor these rather than changing them.
+
+  Use the narrow name filter below. A broad percent-AI-percent pattern also
+  matches email, available and domain, and returns a few hundred false
+  positives.
+
+  statecode 0 = Enabled. statecode 1 = Disabled.
+
+  Usage is in queries/README.md.
+-->
+<fetch version="1.0" mapping="logical" count="500">
+  <entity name="sdkmessageprocessingstep">
+    <attribute name="name" />
+    <attribute name="statecode" />
+    <attribute name="stage" />
+    <filter type="and">
+      <condition attribute="name" operator="like" value="%Microsoft.Dynamics.AI%" />
+    </filter>
+    <order attribute="name" />
+  </entity>
+</fetch>

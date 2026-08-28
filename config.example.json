@@ -1,0 +1,22 @@
+{
+  "_comment": "Copy this file to config.json and fill in your own values. config.json is gitignored.",
+
+  "tenantId": "<YOUR-ENTRA-TENANT-GUID>",
+  "clientId": "<YOUR-APP-REGISTRATION-CLIENT-ID>",
+
+  "_secretEnvVar": "Name of the environment variable holding the client secret. The secret is NEVER read from this file or from the command line.",
+  "secretEnvVar": "PPAI_CLIENT_SECRET",
+
+  "_selection": "Pick exactly one. environmentIdFile wins, then groupName, then namePattern. If all are null the script targets EVERY Dataverse-backed environment in the tenant - be deliberate about that.",
+  "selection": {
+    "groupName": "RedZone-Financial",
+    "namePattern": null,
+    "environmentIdFile": null
+  },
+
+  "_throttleLimit": "Environments processed concurrently. Each environment is its own service-protection bucket, so width is safe. Start at 8.",
+  "throttleLimit": 8,
+
+  "_additionalProcessNames": "Extra process names to include beyond the four AI Primary Entities. IsPaiEnabled is already built in. Add names here only after confirming they exist in your org.",
+  "additionalProcessNames": []
+}
