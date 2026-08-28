@@ -1,7 +1,7 @@
 # Queries
 
-Three read-only FetchXML queries. Nothing here changes state — you can run all of
-them against production safely.
+Three read-only FetchXML queries. Nothing here changes state, so you can run all
+of them against production safely.
 
 ## Running them
 
@@ -54,14 +54,14 @@ throws `System.FormatException: Expected type of attribute value: System.Int32`.
 That is the whole reason step 01 exists.
 
 **`type = 1` restricts results to Definition records.** Each process also has
-Activation children. Those children are *deleted during solution import* — a count
+Activation children. Those children are *deleted during solution import*: a count
 of 14 dropping to 6 has been observed across a single import with the block
 completely intact. **Assert on `statecode`, never on how many rows come back.**
 
 **A double hyphen is illegal inside an XML comment.** Pasting a CLI example
 containing `--xmlFile` into the comment header of a query file makes the file
 invalid XML. `pac` then fails with a bare `System.Xml.XmlException`, a telemetry
-session ID, and — the part that will cost you time — **exit code 0**. That is why
+session ID, and the part that will cost you time, **exit code 0**. That is why
 the usage examples live in this file rather than inside the `.xml` files.
 
 ## Adapting these

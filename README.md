@@ -4,10 +4,10 @@ Tooling to audit and enforce the deactivation of AI processes across Power Platf
 environments at tenant scale, and to produce dated evidence that the state holds.
 
 **Why any of this is necessary, what it does and does not close, and what the
-alternatives are** — that is all in the companion article. This README covers
-deployment and testing only.
+alternatives are** is all in the companion article. This README covers deployment
+and testing only.
 
-> 📄 Companion article: *Blocking AI in Power Platform* — link in the repo
+> 📄 Companion article: *Blocking AI in Power Platform*. Link is in the repo
 > description.
 
 ---
@@ -28,7 +28,7 @@ scripts/
   PPAIBlock.psm1                     the module
 ```
 
-If you only want to *look* — read `queries/README.md` and stop there. Those three
+If you only want to *look*, read `queries/README.md` and stop there. Those three
 queries change nothing and need no app registration.
 
 ---
@@ -123,14 +123,14 @@ one-time per environment and is idempotent.
 pwsh ./scripts/Bootstrap-AppUsers.ps1
 ```
 
-It runs sequentially on purpose — Entra replication behind this call does not
+It runs sequentially on purpose. Entra replication behind this call does not
 reward concurrency.
 
 ---
 
 ## Running
 
-### Audit — reads only, changes nothing
+### Audit, reads only, changes nothing
 
 ```powershell
 pwsh ./scripts/Invoke-AIBlockade.ps1 -Mode Audit
@@ -139,7 +139,7 @@ pwsh ./scripts/Invoke-AIBlockade.ps1 -Mode Audit
 Start here. Always. It shows you the shape of the tenant and the current state of
 every AI process, and writes a CSV you can hand to an auditor.
 
-### Enforce — deactivates
+### Enforce, deactivates
 
 ```powershell
 pwsh ./scripts/Invoke-AIBlockade.ps1 -Mode Enforce
@@ -154,7 +154,7 @@ re-running after a partial failure is safe and cheap.
 |---|---|---|
 | `0` | Every targeted environment compliant | pass |
 | `1` | One or more environments non-compliant | **fail the build** |
-| `2` | The run itself failed — auth, config, connectivity | fail and page someone |
+| `2` | The run itself failed: auth, config, connectivity | fail and page someone |
 
 `1` and `2` are different failures. Do not collapse them into "non-zero".
 
@@ -167,8 +167,8 @@ Each run creates `scripts/runs/<yyyyMMdd-HHmmss>/`:
 | `compliance-evidence.csv` | One row per environment: counts found / draft / active, a `Compliant` flag, the names of anything still active, and duration |
 | `errors.csv` | Written only if something failed. Same rows, plus the exception message. |
 
-Plus `scripts/runs/checkpoint.json`, which is *not* per-run — it accumulates the
-IDs of environments already enforced successfully. A run that dies mid-way
+Plus `scripts/runs/checkpoint.json`, which is *not* per-run. It accumulates the
+IDs of environments already enforced successfully, so a run that dies mid-way
 resumes from it rather than restarting. Delete it to force a full re-run.
 
 Everything under `runs/` is gitignored. It contains environment names, URLs and
@@ -190,7 +190,7 @@ Exit `0`, and every row in the CSV showing `Draft`.
 
 ### 2. Query the environment directly
 
-Independent of the scripts, which is the point — you are testing the environment,
+Independent of the scripts, which is the point. You are testing the environment,
 not the tool that changed it.
 
 ```
@@ -198,7 +198,7 @@ pac org select --environment https://yourorg.crm.dynamics.com/
 pac env fetch --xmlFile queries/02-ai-process-inventory.xml
 ```
 
-Every row should read `Draft`. See `queries/README.md` first — the object type
+Every row should read `Draft`. Read `queries/README.md` first: the object type
 codes in that file **must** be replaced with your own.
 
 ### 3. Try to use the feature
@@ -220,12 +220,12 @@ a one-time exercise. Exit code `1` is designed for exactly this.
 
 ## Rolling back
 
-There is no `-Mode Revert`, deliberately — mass-reactivating AI processes is not
+There is no `-Mode Revert`, deliberately. Mass-reactivating AI processes is not
 an operation that should be one flag away.
 
 To reverse a single environment, PATCH `statecode = 1` / `statuscode = 2` on the
 `workflow` records for that environment. Run an audit *before* enforcing and keep
-the CSV — the `ProcessesFound` and `ProcessesDraft` columns tell you what was
+the CSV. The `ProcessesFound` and `ProcessesDraft` columns tell you what was
 already deactivated before you touched anything, which is what you need in order
 to put it back the way it was rather than the way it shipped.
 
@@ -245,14 +245,14 @@ The module normalises this for its own process. If you hit it in your own shell:
 Same root cause. The module falls back to known install locations.
 
 **The audit returns zero environments**
-The selector matched nothing. It warns rather than reporting success — check
+The selector matched nothing. It warns rather than reporting success. Check
 `groupName` spelling against `pac admin list`, and note that name matching is
 case-sensitive.
 
 **`System.Xml.XmlException` from `pac env fetch`, with exit code 0**
 The `.xml` file is malformed. The usual cause is a double hyphen inside an XML
 comment, which is illegal. Watch for CLI flags pasted into comment headers.
-**The exit code is `0` regardless**, so do not trust it here — check the output.
+**The exit code is `0` regardless**, so do not trust it here. Check the output.
 
 **429 / 502 / 503 / 504**
 Handled. The module retries with backoff and honours `Retry-After`. If it
